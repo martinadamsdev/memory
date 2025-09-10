@@ -240,7 +240,9 @@ export class Memory extends McpAgent {
 	});
 
 	async init() {
-		this.knowledgeGraphManager = new KnowledgeGraphManager(this.sql);
+		// Bind the sql method to ensure correct context
+		const sqlBound = this.sql.bind(this);
+		this.knowledgeGraphManager = new KnowledgeGraphManager(sqlBound);
 		await this.knowledgeGraphManager.init();
 
 		// Define Zod schemas for tool inputs
