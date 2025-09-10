@@ -34,7 +34,7 @@ Deploy your Memory Server to Cloudflare Workers:
 npm run deploy
 ```
 
-This will deploy to: `https://memory.remotecamp.workers.dev/sse`
+This will deploy to: `https://memory.<your-account>.workers.dev/mcp`
 
 ## Development
 
@@ -49,7 +49,7 @@ npm run dev
 Connect to your Memory Server from the Cloudflare AI Playground:
 
 1. Go to https://playground.ai.cloudflare.com/
-2. Enter your deployed MCP server URL: `memory.remotecamp.workers.dev/sse`
+2. Enter your deployed MCP server URL: `memory.<your-account>.workers.dev/mcp`
 3. Use the knowledge graph tools directly from the playground
 
 ## Connect to Claude Desktop
@@ -63,7 +63,7 @@ To connect from Claude Desktop using [mcp-remote proxy](https://www.npmjs.com/pa
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://memory.remotecamp.workers.dev/sse"
+        "https://memory.<your-account>.workers.dev/mcp"
       ]
     }
   }
@@ -75,7 +75,7 @@ To connect from Claude Desktop using [mcp-remote proxy](https://www.npmjs.com/pa
 - **MCP Agent**: Extends `McpAgent` from the agents library for MCP protocol support
 - **Durable Objects**: Uses Cloudflare Durable Objects with SQL storage for persistence
 - **Knowledge Graph**: Implements entities and relations with full CRUD operations
-- **SSE Transport**: Supports Server-Sent Events for real-time MCP communication
+- **MCP Transport**: Supports both SSE (Server-Sent Events) and standard HTTP for MCP communication
 
 ## Example Usage
 
