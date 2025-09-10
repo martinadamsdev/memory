@@ -1,50 +1,88 @@
-# Building a Remote MCP Server on Cloudflare (Without Auth)
+# Memory Server - MCP Knowledge Graph on Cloudflare Workers
 
-This example allows you to deploy a remote MCP server that doesn't require authentication on Cloudflare Workers. 
+A Model Context Protocol (MCP) server that provides persistent knowledge graph management, deployed on Cloudflare Workers with Durable Objects for state management.
 
-## Get started: 
+## Features
 
-[![Deploy to Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ai/tree/main/demos/remote-mcp-authless)
+This Memory Server implements a knowledge graph system with the following capabilities:
 
-This will deploy your MCP server to a URL like: `remote-mcp-server-authless.<your-account>.workers.dev/sse`
+- **Entity Management**: Create and manage entities with names, types, and observations
+- **Relationship Tracking**: Define connections between entities with typed relationships
+- **Observation System**: Add and manage observations for each entity
+- **Search & Query**: Search nodes by name, type, or observation content
+- **Persistent Storage**: Uses Cloudflare Durable Objects SQL for data persistence
 
-Alternatively, you can use the command line below to get the remote MCP Server created on your local machine:
+## Available Tools
+
+The server exposes the following MCP tools:
+
+- `create_entities` - Create new entities in the knowledge graph
+- `create_relations` - Define relationships between entities
+- `add_observations` - Add observations to existing entities
+- `delete_entities` - Remove entities and their relationships
+- `delete_observations` - Remove specific observations from entities
+- `delete_relations` - Remove relationships between entities
+- `read_graph` - Read the entire knowledge graph
+- `search_nodes` - Search for entities by query string
+- `open_nodes` - Retrieve specific entities by name
+
+## Deployment
+
+Deploy your Memory Server to Cloudflare Workers:
+
 ```bash
-npm create cloudflare@latest -- my-mcp-server --template=cloudflare/ai/demos/remote-mcp-authless
+npm run deploy
 ```
 
-## Customizing your MCP Server
+This will deploy to: `https://memory.remotecamp.workers.dev/sse`
 
-To add your own [tools](https://developers.cloudflare.com/agents/model-context-protocol/tools/) to the MCP server, define each tool inside the `init()` method of `src/index.ts` using `this.server.tool(...)`. 
+## Development
+
+Start the development server locally:
+
+```bash
+npm run dev
+```
 
 ## Connect to Cloudflare AI Playground
 
-You can connect to your MCP server from the Cloudflare AI Playground, which is a remote MCP client:
+Connect to your Memory Server from the Cloudflare AI Playground:
 
 1. Go to https://playground.ai.cloudflare.com/
-2. Enter your deployed MCP server URL (`remote-mcp-server-authless.<your-account>.workers.dev/sse`)
-3. You can now use your MCP tools directly from the playground!
+2. Enter your deployed MCP server URL: `memory.remotecamp.workers.dev/sse`
+3. Use the knowledge graph tools directly from the playground
 
-## Connect Claude Desktop to your MCP server
+## Connect to Claude Desktop
 
-You can also connect to your remote MCP server from local MCP clients, by using the [mcp-remote proxy](https://www.npmjs.com/package/mcp-remote). 
-
-To connect to your MCP server from Claude Desktop, follow [Anthropic's Quickstart](https://modelcontextprotocol.io/quickstart/user) and within Claude Desktop go to Settings > Developer > Edit Config.
-
-Update with this configuration:
+To connect from Claude Desktop using [mcp-remote proxy](https://www.npmjs.com/package/mcp-remote):
 
 ```json
 {
   "mcpServers": {
-    "calculator": {
+    "memory": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:8787/sse"  // or remote-mcp-server-authless.your-account.workers.dev/sse
+        "https://memory.remotecamp.workers.dev/sse"
       ]
     }
   }
 }
 ```
 
-Restart Claude and you should see the tools become available. 
+## Architecture
+
+- **MCP Agent**: Extends `McpAgent` from the agents library for MCP protocol support
+- **Durable Objects**: Uses Cloudflare Durable Objects with SQL storage for persistence
+- **Knowledge Graph**: Implements entities and relations with full CRUD operations
+- **SSE Transport**: Supports Server-Sent Events for real-time MCP communication
+
+## Example Usage
+
+Once connected, you can use natural language to interact with the knowledge graph:
+
+- "Create an entity for 'John Doe' as a person"
+- "Add an observation that John likes programming"
+- "Create a relationship between John and his project"
+- "Search for all entities related to programming"
+- "Show me the entire knowledge graph" 
